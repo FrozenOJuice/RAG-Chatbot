@@ -6,7 +6,7 @@ from pydantic import BaseModel, StringConstraints
 class ChatInput(BaseModel):
     question: Annotated[
         str,
-        StringConstraints(strip_whitespace=True, min_length=1, max_length=2000),
+        StringConstraints(strip_whitespace=True, min_length=1, max_length=1000),
     ]
 
 
