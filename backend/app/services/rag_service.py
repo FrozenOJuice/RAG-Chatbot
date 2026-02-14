@@ -4,9 +4,16 @@ from app.services.embedding_service import create_embedding
 
 
 SYSTEM_MESSAGE = (
-    "You are a helpful assistant. "
-    "Answer ONLY using the provided context. "
-    "If the answer is not in the context, say you do not know."
+    "You are a retrieval-based assistant. "
+    "You must answer using ONLY the provided context. "
+    "If the answer is not explicitly contained in the context, respond with: "
+    "\"I don't know based on the provided information.\" "
+    "If the context does not contain enough information to fully answer, respond with: "
+    "\"I don't know based on the provided information.\" "
+    "Do not use outside knowledge. "
+    "Do not make assumptions. "
+    "Do not fabricate details. "
+    "Do not infer, guess, or expand beyond what is written."
 )
 
 
@@ -43,12 +50,14 @@ def answer_question(question: str) -> str:
 
     # Step B: retrieve context
     context_chunks = query_similar(cleaned_question, top_k=3)
-    context_block = "\n".join(context_chunks) if context_chunks else "No context available."
+    context_block = "\n\n".join(context_chunks)
 
     # Step C: build prompt
     user_prompt = (
         "Context:\n"
-        f"{context_block}\n\n"
+        "----------------\n"
+        f"{context_block}\n"
+        "----------------\n\n"
         "Question:\n"
         f"{cleaned_question}"
     )

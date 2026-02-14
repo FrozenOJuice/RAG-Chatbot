@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RAG Chatbot</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="backdrop"></div>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">RAG Chatbot</p>
+        <h1>Ask with context. Curate with admin access.</h1>
+        <p class="subtitle">
+          Users can ask questions from your knowledge base. Admins can add new knowledge chunks securely.
+        </p>
+      </header>
+
+      <section class="panel setup-panel">
+        <label for="apiBase">API Base URL</label>
+        <div class="setup-row">
+          <input id="apiBase" type="url" value="http://127.0.0.1:8000" />
+          <button id="healthBtn" type="button">Check Backend</button>
+          <span id="healthStatus" class="status neutral">Not checked</span>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="panel">
+          <h2>Ask a Question</h2>
+          <form id="chatForm">
+            <label for="questionInput">Question</label>
+            <textarea
+              id="questionInput"
+              rows="4"
+              maxlength="2000"
+              placeholder="What does FastAPI do in this project?"
+              required
+            ></textarea>
+            <button id="askBtn" type="submit">Ask</button>
+          </form>
+
+          <div class="result">
+            <p class="result-label">Answer</p>
+            <pre id="answerOutput">No answer yet.</pre>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Admin: Add Knowledge</h2>
+          <p class="hint">
+            The admin key is hidden in the UI and sent as the <code>X-ADMIN-KEY</code> header. Do not expose this
+            frontend publicly.
+          </p>
+          <form id="adminForm">
+            <label for="adminKeyInput">Admin Key</label>
+            <input id="adminKeyInput" type="password" autocomplete="off" placeholder="Enter admin key" required />
+
+            <label for="knowledgeInput">Knowledge Text</label>
+            <textarea
+              id="knowledgeInput"
+              rows="6"
+              maxlength="10000"
+              placeholder="Paste text to chunk and store in the vector database."
+              required
+            ></textarea>
+            <button id="addBtn" type="submit">Add Knowledge</button>
+          </form>
+
+          <p id="adminStatus" class="status neutral">No submissions yet.</p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
