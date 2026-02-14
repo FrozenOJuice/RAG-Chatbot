@@ -27,8 +27,20 @@
         </div>
       </section>
 
-      <section class="grid">
-        <article class="panel">
+      <section class="panel mode-panel">
+        <p class="mode-label">Mode</p>
+        <div class="mode-toggle" role="tablist" aria-label="App mode">
+          <button id="userModeBtn" class="mode-btn active" type="button" aria-pressed="true">
+            User
+          </button>
+          <button id="adminModeBtn" class="mode-btn" type="button" aria-pressed="false">
+            Admin
+          </button>
+        </div>
+      </section>
+
+      <section class="view-stack">
+        <article id="userPanel" class="panel view-panel">
           <h2>Ask a Question</h2>
           <form id="chatForm">
             <label for="questionInput">Question</label>
@@ -48,7 +60,7 @@
           </div>
         </article>
 
-        <article class="panel">
+        <article id="adminPanel" class="panel view-panel is-hidden">
           <h2>Admin: Add Knowledge</h2>
           <p class="hint">
             The admin key is hidden in the UI and sent as the <code>X-ADMIN-KEY</code> header. Do not expose this

@@ -83,6 +83,54 @@ h1 {
   margin-bottom: 1rem;
 }
 
+.mode-panel {
+  margin-bottom: 1rem;
+}
+
+.mode-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mode-toggle {
+  display: inline-flex;
+  gap: 0.4rem;
+  padding: 0.35rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #f7faf8;
+}
+
+.mode-btn {
+  margin-top: 0;
+  padding: 0.46rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  background: transparent;
+  color: var(--muted);
+}
+
+.mode-btn.active {
+  background: linear-gradient(135deg, var(--primary), #1f7a43);
+  color: #fff;
+}
+
+.view-stack {
+  display: block;
+}
+
+.view-panel {
+  animation: rise 260ms ease-out both;
+}
+
+.is-hidden {
+  display: none;
+}
+
 .setup-row {
   display: flex;
   gap: 0.6rem;
@@ -200,7 +248,10 @@ pre {
 }
 
 @media (max-width: 880px) {
-  .grid {
-    grid-template-columns: 1fr;
+  .mode-toggle {
+    width: 100%;
+  }
+  .mode-btn {
+    flex: 1;
   }
 }

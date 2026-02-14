@@ -1,6 +1,10 @@
 const apiBaseInput = document.getElementById("apiBase");
 const healthBtn = document.getElementById("healthBtn");
 const healthStatus = document.getElementById("healthStatus");
+const userModeBtn = document.getElementById("userModeBtn");
+const adminModeBtn = document.getElementById("adminModeBtn");
+const userPanel = document.getElementById("userPanel");
+const adminPanel = document.getElementById("adminPanel");
 
 const chatForm = document.getElementById("chatForm");
 const questionInput = document.getElementById("questionInput");
@@ -15,6 +19,16 @@ const adminStatus = document.getElementById("adminStatus");
 
 function getApiBase() {
   return apiBaseInput.value.trim().replace(/\/+$/, "");
+}
+
+function setMode(mode) {
+  const showUser = mode === "user";
+  userPanel.classList.toggle("is-hidden", !showUser);
+  adminPanel.classList.toggle("is-hidden", showUser);
+  userModeBtn.classList.toggle("active", showUser);
+  adminModeBtn.classList.toggle("active", !showUser);
+  userModeBtn.setAttribute("aria-pressed", String(showUser));
+  adminModeBtn.setAttribute("aria-pressed", String(!showUser));
 }
 
 function setStatus(element, message, type) {
@@ -50,6 +64,8 @@ async function checkHealth() {
 }
 
 healthBtn.addEventListener("click", checkHealth);
+userModeBtn.addEventListener("click", () => setMode("user"));
+adminModeBtn.addEventListener("click", () => setMode("admin"));
 
 chatForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -126,3 +142,4 @@ adminForm.addEventListener("submit", async (event) => {
 });
 
 checkHealth();
+setMode("user");
