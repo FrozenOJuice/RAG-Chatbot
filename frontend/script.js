@@ -15,6 +15,10 @@ const adminForm = document.getElementById("adminForm");
 const adminKeyInput = document.getElementById("adminKeyInput");
 const knowledgeInput = document.getElementById("knowledgeInput");
 const addBtn = document.getElementById("addBtn");
+const deleteByIdForm = document.getElementById("deleteByIdForm");
+const docIdInput = document.getElementById("docIdInput");
+const deleteByIdBtn = document.getElementById("deleteByIdBtn");
+const deleteAllBtn = document.getElementById("deleteAllBtn");
 const adminStatus = document.getElementById("adminStatus");
 
 function getApiBase() {
@@ -32,8 +36,9 @@ function setMode(mode) {
 }
 
 function setStatus(element, message, type) {
+  const baseClass = element.dataset.baseClass ? ` ${element.dataset.baseClass}` : "";
   element.textContent = message;
-  element.className = `status ${type}`;
+  element.className = `status ${type}${baseClass}`;
 }
 
 async function readErrorMessage(response) {
@@ -55,12 +60,26 @@ async function checkHealth() {
       const detail = await readErrorMessage(response);
       throw new Error(detail);
     }
-    setStatus(healthStatus, "Backend online", "ok");
+    await response.json();
+    setStatus(healthStatus, "Online", "ok");
   } catch (error) {
     setStatus(healthStatus, `Offline: ${error.message}`, "error");
   } finally {
     healthBtn.disabled = false;
   }
+}
+
+function getAdminKey() {
+  return adminKeyInput.value.trim();
+}
+
+function requireAdminKey() {
+  const key = getAdminKey();
+  if (!key) {
+    setStatus(adminStatus, "Admin key is required.", "error");
+    return null;
+  }
+  return key;
 }
 
 healthBtn.addEventListener("click", checkHealth);
@@ -101,13 +120,10 @@ chatForm.addEventListener("submit", async (event) => {
 
 adminForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const adminKey = adminKeyInput.value.trim();
+  const adminKey = requireAdminKey();
   const text = knowledgeInput.value.trim();
 
-  if (!adminKey) {
-    setStatus(adminStatus, "Admin key is required.", "error");
-    return;
-  }
+  if (!adminKey) return;
   if (!text) {
     setStatus(adminStatus, "Knowledge text is required.", "error");
     return;
@@ -138,6 +154,74 @@ adminForm.addEventListener("submit", async (event) => {
     setStatus(adminStatus, `Failed: ${error.message}`, "error");
   } finally {
     addBtn.disabled = false;
+  }
+});
+
+deleteByIdForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const adminKey = requireAdminKey();
+  const docId = docIdInput.value.trim();
+
+  if (!adminKey) return;
+  if (!docId) {
+    setStatus(adminStatus, "Document ID is required.", "error");
+    return;
+  }
+
+  deleteByIdBtn.disabled = true;
+  setStatus(adminStatus, "Deleting by ID...", "neutral");
+
+  try {
+    const response = await fetch(`${getApiBase()}/admin/delete/${encodeURIComponent(docId)}`, {
+      method: "DELETE",
+      headers: { "X-ADMIN-KEY": adminKey },
+    });
+
+    if (!response.ok) {
+      const detail = await readErrorMessage(response);
+      throw new Error(detail);
+    }
+
+    const data = await response.json();
+    if (data.deleted) {
+      setStatus(adminStatus, `Deleted document: ${data.id}`, "ok");
+      docIdInput.value = "";
+    } else {
+      setStatus(adminStatus, `No document found for ID: ${data.id}`, "neutral");
+    }
+  } catch (error) {
+    setStatus(adminStatus, `Failed: ${error.message}`, "error");
+  } finally {
+    deleteByIdBtn.disabled = false;
+  }
+});
+
+deleteAllBtn.addEventListener("click", async () => {
+  const adminKey = requireAdminKey();
+  if (!adminKey) return;
+  if (!window.confirm("Delete ALL knowledge from storage? This cannot be undone.")) return;
+
+  deleteAllBtn.disabled = true;
+  setStatus(adminStatus, "Deleting all knowledge...", "neutral");
+
+  try {
+    const response = await fetch(`${getApiBase()}/admin/delete-all`, {
+      method: "DELETE",
+      headers: { "X-ADMIN-KEY": adminKey },
+    });
+
+    if (!response.ok) {
+      const detail = await readErrorMessage(response);
+      throw new Error(detail);
+    }
+
+    const data = await response.json();
+    setStatus(adminStatus, `Deleted ${data.deleted_count} document(s).`, "ok");
+    docIdInput.value = "";
+  } catch (error) {
+    setStatus(adminStatus, `Failed: ${error.message}`, "error");
+  } finally {
+    deleteAllBtn.disabled = false;
   }
 });
 

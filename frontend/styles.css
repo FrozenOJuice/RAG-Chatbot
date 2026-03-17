@@ -138,9 +138,26 @@ h1 {
   flex-wrap: wrap;
 }
 
+.health-control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.health-control #healthBtn {
+  margin-top: 0;
+}
+
 h2 {
   margin: 0 0 0.65rem;
   font-size: 1.1rem;
+}
+
+.subhead {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  color: var(--primary);
 }
 
 label {
@@ -186,10 +203,26 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.danger-btn {
+  background: linear-gradient(135deg, #991b1b, #b91c1c);
+}
+
 .hint {
   margin: 0 0 0.35rem;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.section-divider {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 0.95rem 0;
+}
+
+.action-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
 }
 
 .result {
@@ -234,6 +267,45 @@ pre {
 .status.error {
   background: #fce2e2;
   color: var(--error);
+}
+
+#adminStatus {
+  display: table;
+  margin: 1rem auto 0;
+  text-align: center;
+}
+
+.status.health-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.72rem;
+  border: 1px solid transparent;
+  justify-content: center;
+}
+
+.status.health-pill::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #a1a79f;
+}
+
+.status.health-pill.ok {
+  border-color: #b9e5be;
+}
+
+.status.health-pill.ok::before {
+  background: #16a34a;
+}
+
+.status.health-pill.error {
+  border-color: #f4b6b6;
+}
+
+.status.health-pill.error::before {
+  background: #dc2626;
 }
 
 @keyframes rise {

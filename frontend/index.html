@@ -22,8 +22,10 @@
         <label for="apiBase">API Base URL</label>
         <div class="setup-row">
           <input id="apiBase" type="url" value="http://127.0.0.1:8000" />
-          <button id="healthBtn" type="button">Check Backend</button>
-          <span id="healthStatus" class="status neutral">Not checked</span>
+          <div class="health-control">
+            <button id="healthBtn" type="button">Check Backend</button>
+            <span id="healthStatus" class="status neutral health-pill" data-base-class="health-pill">Not checked</span>
+          </div>
         </div>
       </section>
 
@@ -61,14 +63,18 @@
         </article>
 
         <article id="adminPanel" class="panel view-panel is-hidden">
-          <h2>Admin: Add Knowledge</h2>
+          <h2>Admin Tools</h2>
           <p class="hint">
             The admin key is hidden in the UI and sent as the <code>X-ADMIN-KEY</code> header. Do not expose this
             frontend publicly.
           </p>
+          <label for="adminKeyInput">Admin Key</label>
+          <input id="adminKeyInput" type="password" autocomplete="off" placeholder="Enter admin key" required />
+
+          <hr class="section-divider" />
+
+          <h3 class="subhead">Add Knowledge</h3>
           <form id="adminForm">
-            <label for="adminKeyInput">Admin Key</label>
-            <input id="adminKeyInput" type="password" autocomplete="off" placeholder="Enter admin key" required />
 
             <label for="knowledgeInput">Knowledge Text</label>
             <textarea
@@ -80,6 +86,19 @@
             ></textarea>
             <button id="addBtn" type="submit">Add Knowledge</button>
           </form>
+
+          <hr class="section-divider" />
+
+          <h3 class="subhead">Delete Knowledge</h3>
+          <form id="deleteByIdForm">
+            <label for="docIdInput">Document ID</label>
+            <input id="docIdInput" type="text" placeholder="Paste document ID to delete" />
+            <button id="deleteByIdBtn" type="submit" class="danger-btn">Delete by ID</button>
+          </form>
+
+          <div class="action-row">
+            <button id="deleteAllBtn" type="button" class="danger-btn">Delete All Knowledge</button>
+          </div>
 
           <p id="adminStatus" class="status neutral">No submissions yet.</p>
         </article>
